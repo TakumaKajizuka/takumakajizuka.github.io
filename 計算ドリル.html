@@ -1,0 +1,123 @@
+<html>
+    <head>
+        <title>計算ドリル</title>
+    </head>
+
+    <body>
+        <h1>計算ドリル</h1>
+        <h4 id="accuracy">正解率: 0.000%</h4>
+        <h2 id="q"></h2>
+        <input id="a" type="number">
+        <button onclick="回答()">回答</button>
+        <button onclick="reloadPage()">問題を生成</button>
+        <button onclick="resetAccuracy()">正解率をリセット</button>
+        <button onclick="閉じる()">閉じる</button>
+        <h3>注意事項</h3>
+        <p>問題が表示されない場合は「問題を生成」ボタンを再度クリックしてください。</p>
+        <p>問題を生成する又はページを再びロードすると画面が荒ぶることがありますが問題ありません。</p>
+        <marquee>&copy; 2024 KajizukaTakuma</marquee>
+    </body>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let correctCount = parseInt(localStorage.getItem("correctCount")) || 0;
+            let totalCount = parseInt(localStorage.getItem("totalCount")) || 0;
+
+            function updateAccuracy() {
+                let accuracy = totalCount === 0 ? 0 : ((correctCount / totalCount) * 100).toFixed(1);
+                document.getElementById("accuracy").innerText = `正解率: ${accuracy}%`;
+            }
+
+            let n1 = Math.round(Math.random() * 100);
+            let n2 = Math.round(Math.random() * 100);
+            let n3 = Math.round(Math.random() * 50); +50
+            let n4 = Math.round(Math.random() * 50); 
+            let n5 = Math.round(Math.random() * 10);
+            let n6 = Math.round(Math.random() * 10);
+            let n71 = Math.floor(Math.random() * 51);
+            let n7 = n71 * 2;
+            let n0 = Math.floor(Math.random() * 4) + 1;
+
+            function 回答() {
+                let ans = parseInt(document.getElementById("a").value);
+                let correct = false;
+
+                totalCount++;
+
+                if (n0 === 1 && n1 + n2 === ans) correct = true;
+                else if (n0 === 2 && n3 - n4 === ans) correct = true;
+                else if (n0 === 3 && n5 * n6 === ans) correct = true;
+                else if (n0 === 4 && n7 / 2 === ans) correct = true;
+
+                if (correct) {
+                    document.getElementById("q").innerText = "正解！";
+                    correctCount++;
+                } else {
+                    document.getElementById("q").innerText = "残念…不正解";
+                }
+
+                // ローカルストレージに正解数と回答回数を保存
+                localStorage.setItem("correctCount", correctCount);
+                localStorage.setItem("totalCount", totalCount);
+
+                updateAccuracy();
+            }
+
+            function resetAccuracy() {
+                correctCount = 0;
+                totalCount = 0;
+                localStorage.removeItem("correctCount");
+                localStorage.removeItem("totalCount");
+                updateAccuracy();
+            }
+
+            if (n0 === 1)
+                document.getElementById("q").innerText = `${n1} + ${n2} = ?`;
+            else if (n0 === 2)
+                document.getElementById("q").innerText = `${n3} - ${n4} = ?`;
+            else if (n0 === 3)
+                document.getElementById("q").innerText = `${n5} ✕ ${n6} = ?`;
+            else if (n0 === 4)
+                document.getElementById("q").innerText = `${n7} ÷ 2 = ?`;
+
+            if (n3 < n4) location.reload();
+
+            // ページロード時に正解率を更新
+            updateAccuracy();
+
+            // 関数をグローバルに露出
+            window.回答 = 回答;
+            window.resetAccuracy = resetAccuracy;
+        });
+    </script>
+
+    <script>
+        function reloadPage() {
+            location.reload();
+        }
+        function 閉じる() {
+            window.close();
+        }
+    </script>
+
+    <style>
+        h1 {text-align: center;
+            font-size: 30px;
+            color:black;
+            background-color: aqua;
+        }
+        h2 {font-size: 20px;
+            color: black;
+        }
+        h3 {font-size: 15px;
+            color: red;
+        }
+        h4 {font-size: 18px;
+            color: green;
+        }
+        p {font-size: 14px;
+            color: black;
+        }
+    </style>
+
+</html>
